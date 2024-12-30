@@ -1,8 +1,7 @@
 # **Credit Fraud Detection Project**
 
 ## **Overview**
-This project focuses on building a machine learning model to detect fraudulent financial transactions. By leveraging a large dataset with imbalanced classes, the project aims to identify fraudulent activity with high accuracy while minimizing false positives to ensure reliability in real-world applications.
-Link Dataset: [Credit Fraud](https://www.kaggle.com/datasets/rupakroy/online-payments-fraud-detection-dataset)
+This project focuses on building a machine learning model to detect fraudulent financial transactions. By leveraging a large dataset with imbalanced classes, the project aims to identify fraudulent activity with high accuracy while minimizing false positives to ensure reliability in real-world applications. Link Dataset: [Credit Fraud](https://www.kaggle.com/datasets/rupakroy/online-payments-fraud-detection-dataset)
 ---
 
 ## **Features**
