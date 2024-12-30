@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraud Detection App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 50px auto;
+            display: flex;
+            background: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .form-section {
+            background-color: #f9fafc;
+            padding: 20px;
+            flex: 0.4;
+            border-right: 1px solid #ddd;
+            box-sizing: border-box;
+        }
+
+        .result-section {
+            text-align: center;
+            padding: 20px;
+            flex: 0.6;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        label {
+            font-size: 0.9rem;
+            color: #555;
+            font-weight: bold;
+        }
+
+        input, select, button {
+            padding: 8px;
+            font-size: 0.9rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .result-section h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        /* Màu khi kết quả là Fraud */
+        .fraud-result {
+            background: #fbe3e4;
+            border-left: 5px solid #e74c3c;
+        }
+
+        .fraud-result h2 {
+            color: #e74c3c;
+        }
+
+        /* Màu khi kết quả không phải Fraud */
+        .no-fraud-result {
+            background: #e9f7ef;
+            border-left: 5px solid #27ae60;
+        }
+
+        .no-fraud-result h2 {
+            color: #27ae60;
+        }
+
+        .result p {
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .form-section, .result-section {
+                flex: 1;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Section nhập liệu -->
+        <div class="form-section">
+            <h1>Nhập thông tin đầu vào:</h1>
+            <form method="POST">
+                <label for="type">Loại giao dịch:</label>
+                <select name="type" id="type">
+                    <option value="PAYMENT">PAYMENT</option>
+                    <option value="TRANSFER">TRANSFER</option>
+                    <option value="CASH_OUT">CASH_OUT</option>
+                    <option value="DEBIT">DEBIT</option>
+                    <option value="CASH_IN">CASH_IN</option>
+                </select>
+
+                <label for="step">Thời gian giao dịch:</label>
+                <input type="number" name="step" id="step" min="0" max="744" required>
+
+                <label for="amount">Số tiền trong giao dịch:</label>
+                <input type="number" name="amount" id="amount" required>
+
+                <label for="oldbalanceorg">Số dư của tài khoản gửi trước giao dịch:</label>
+                <input type="number" name="oldbalanceOrg" id="oldbalanceOrg" required>
+
+                <label for="newbalanceorg">Số dư của tài khoản gửi sau giao dịch:</label>
+                <input type="number" name="newbalanceOrig" id="newbalanceOrig" required>
+
+                <label for="oldbalancedest">Số dư của tài khoản nhận trước giao dịch:</label>
+                <input type="number" name="oldbalanceDest" id="oldbalanceDest" required>
+
+                <label for="newbalancedest">Số dư của tài khoản nhận sau giao dịch:</label>
+                <input type="number" name="newbalanceDest" id="newbalanceDest" required>
+
+                <button type="submit">Prediction</button>
+            </form>
+        </div>
+
+        <!-- Section kết quả -->
+        <div class="result-section">
+            <h1>Prediction Result</h1>
+            {% if result %}
+            <div class="result {% if result.is_fraud %}fraud-result{% else %}no-fraud-result{% endif %}">
+                <h2>Result:</h2>
+                <p>Kết quả giao dịch là: 
+                    {% if result.is_fraud %}
+                        <strong>có khả năng gian lận</strong> với xác suất gian lận là {{ result.probability_fraud }}%.
+                    {% else %}
+                        <strong>không có khả năng gian lận</strong> với xác suất không gian lận là {{ result.probability_no_fraud }}%.
+                    {% endif %}
+                </p>
+            </div>
+            {% else %}
+            <p>Vui lòng điền vào mẫu để phát hiện xem giao dịch có gian lận hay không.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
